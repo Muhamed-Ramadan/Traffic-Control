@@ -480,7 +480,7 @@ void APP_Run(void)
  2b0:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <__data_end>
  2b4:	81 11       	cpse	r24, r1
  2b6:	74 c0       	rjmp	.+232    	; 0x3a0 <APP_Run+0x188>
-			state=GREEN;
+			 state=GREEN;
  2b8:	81 e0       	ldi	r24, 0x01	; 1
  2ba:	80 93 65 00 	sts	0x0065, r24	; 0x800065 <state>
  2be:	70 c0       	rjmp	.+224    	; 0x3a0 <APP_Run+0x188>

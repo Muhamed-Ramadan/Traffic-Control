@@ -129,7 +129,7 @@ void APP_Run(void)
 			}
 			
 			if (pedestrian_mode_flag==0)
-			state=GREEN;
+			 state=GREEN;
 		}
 		else if (state==GREEN)
 		{

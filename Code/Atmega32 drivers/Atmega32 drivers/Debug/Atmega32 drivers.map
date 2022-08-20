@@ -492,13 +492,13 @@ END GROUP
 .debug_str      0x00000000      0x525
  *(.debug_str)
  .debug_str     0x00000000      0x196 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/crtatmega32.o
- .debug_str     0x00000196      0x264 APPs/APPS.o
-                                0x283 (size before relaxing)
- .debug_str     0x000003fa       0x11 main.o
-                                0x182 (size before relaxing)
- .debug_str     0x0000040b       0xb2 MCAL/External_Interrupt/EXT_INT.o
+ .debug_str     0x00000196      0x253 APPs/APPS.o
+                                0x272 (size before relaxing)
+ .debug_str     0x000003e9       0x11 main.o
+                                0x171 (size before relaxing)
+ .debug_str     0x000003fa       0x51 MCAL/External_Interrupt/EXT_INT.o
                                 0x1e7 (size before relaxing)
- .debug_str     0x000004bd       0x68 MCAL/Timer/Timers.o
+ .debug_str     0x0000044b       0xda MCAL/Timer/Timers.o
                                 0x20a (size before relaxing)
 
 .debug_loc      0x00000000      0x33e

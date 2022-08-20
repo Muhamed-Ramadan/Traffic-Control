@@ -5,7 +5,7 @@
 #define APPS_H_
 
 
-#define  F_CPU 16000000UL
+
 #include "bitMath.h"
 #include "dataTypes.h"
 #include "registers.h"
