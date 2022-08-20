@@ -2,7 +2,7 @@
 #include "EXT_INT.h"
 
 
-void INT_init(u8 int_num , u8 sense_control)
+void INT_init(INT_NUM int_num , SENSE_CONTROL sense_control)
 {
 	GICR|=(1<<int_num);
 	switch(int_num)

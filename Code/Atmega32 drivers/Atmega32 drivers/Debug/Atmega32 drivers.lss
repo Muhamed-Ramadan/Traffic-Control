@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 000000c8  00000000  00000000  0000065c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000bb0  00000000  00000000  00000724  2**0
+  6 .debug_info   00000beb  00000000  00000000  00000724  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000007bc  00000000  00000000  000012d4  2**0
+  7 .debug_abbrev 000007c9  00000000  00000000  0000130f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000005eb  00000000  00000000  00001a90  2**0
+  8 .debug_line   000005eb  00000000  00000000  00001ad8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000001ac  00000000  00000000  0000207c  2**2
+  9 .debug_frame  000001ac  00000000  00000000  000020c4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000004ae  00000000  00000000  00002228  2**0
+ 10 .debug_str    00000525  00000000  00000000  00002270  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000033e  00000000  00000000  000026d6  2**0
+ 11 .debug_loc    0000033e  00000000  00000000  00002795  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000b8  00000000  00000000  00002a14  2**0
+ 12 .debug_ranges 000000b8  00000000  00000000  00002ad3  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -637,7 +637,7 @@ int main(void)
 #include "EXT_INT.h"
 
 
-void INT_init(u8 int_num , u8 sense_control)
+void INT_init(INT_NUM int_num , SENSE_CONTROL sense_control)
 {
 	GICR|=(1<<int_num);
  3ae:	9b b7       	in	r25, 0x3b	; 59
