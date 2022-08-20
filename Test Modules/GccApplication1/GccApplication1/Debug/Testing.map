@@ -29,25 +29,14 @@ Discarded input sections
  .text          0x00000000        0x0 External_Interrupt/APP_E.o
  .data          0x00000000        0x0 External_Interrupt/APP_E.o
  .bss           0x00000000        0x0 External_Interrupt/APP_E.o
- .text.Ex_init  0x00000000        0xc External_Interrupt/APP_E.o
  .text          0x00000000        0x0 External_Interrupt/EXT_INT.o
  .data          0x00000000        0x0 External_Interrupt/EXT_INT.o
  .bss           0x00000000        0x0 External_Interrupt/EXT_INT.o
- .text.INT_init
-                0x00000000       0x58 External_Interrupt/EXT_INT.o
- .debug_info    0x00000000       0xed External_Interrupt/EXT_INT.o
- .debug_abbrev  0x00000000       0x85 External_Interrupt/EXT_INT.o
- .debug_loc     0x00000000       0x8d External_Interrupt/EXT_INT.o
- .debug_aranges
-                0x00000000       0x20 External_Interrupt/EXT_INT.o
- .debug_ranges  0x00000000       0x10 External_Interrupt/EXT_INT.o
- .debug_line    0x00000000       0x97 External_Interrupt/EXT_INT.o
- .debug_str     0x00000000      0x1e8 External_Interrupt/EXT_INT.o
- .comment       0x00000000       0x31 External_Interrupt/EXT_INT.o
- .debug_frame   0x00000000       0x24 External_Interrupt/EXT_INT.o
  .text          0x00000000        0x0 ISR_Interrupt/APP_I.o
  .data          0x00000000        0x0 ISR_Interrupt/APP_I.o
  .bss           0x00000000        0x0 ISR_Interrupt/APP_I.o
+ .text.ISR_init
+                0x00000000       0x12 ISR_Interrupt/APP_I.o
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
@@ -244,7 +233,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x12a
+.text           0x00000000      0x17c
  *(.vectors)
  .vectors       0x00000000       0x54 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega32/avr5/crtatmega32.o
                 0x00000000                __vector_default
@@ -321,25 +310,27 @@ END GROUP
                 0x00000078                __vector_20
                 0x0000007c                . = ALIGN (0x2)
  *(.text.*)
+ .text.Ex_init  0x0000007c        0xc External_Interrupt/APP_E.o
+                0x0000007c                Ex_init
  .text.__vector_1
-                0x0000007c       0x24 External_Interrupt/APP_E.o
-                0x0000007c                __vector_1
- .text.ISR_init
-                0x000000a0       0x12 ISR_Interrupt/APP_I.o
-                0x000000a0                ISR_init
+                0x00000088       0x24 External_Interrupt/APP_E.o
+                0x00000088                __vector_1
+ .text.INT_init
+                0x000000ac       0x58 External_Interrupt/EXT_INT.o
+                0x000000ac                INT_init
  .text.__vector_2
-                0x000000b2       0x24 ISR_Interrupt/APP_I.o
-                0x000000b2                __vector_2
- .text.main     0x000000d6        0x6 main.o
-                0x000000d6                main
+                0x00000104       0x24 ISR_Interrupt/APP_I.o
+                0x00000104                __vector_2
+ .text.main     0x00000128        0x6 main.o
+                0x00000128                main
  .text.__vector_11
-                0x000000dc       0x4a Timers/Timers.o
-                0x000000dc                __vector_11
-                0x00000126                . = ALIGN (0x2)
+                0x0000012e       0x4a Timers/Timers.o
+                0x0000012e                __vector_11
+                0x00000178                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000126        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x00000126                _exit
-                0x00000126                exit
+ .fini9         0x00000178        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00000178                _exit
+                0x00000178                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -358,11 +349,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000126        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000178        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000012a                _etext = .
+                0x0000017c                _etext = .
 
-.data           0x00800060        0x0 load address 0x0000012a
+.data           0x00800060        0x0 load address 0x0000017c
                 [!provide]                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -381,8 +372,8 @@ END GROUP
  .bss.overflow  0x00800060        0x4 Timers/Timers.o
  *(COMMON)
                 0x00800064                PROVIDE (__bss_end, .)
-                0x0000012a                __data_load_start = LOADADDR (.data)
-                0x0000012a                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000017c                __data_load_start = LOADADDR (.data)
+                0x0000017c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800064        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -432,6 +423,7 @@ END GROUP
  *(.comment)
  .comment       0x00000000       0x30 External_Interrupt/APP_E.o
                                  0x31 (size before relaxing)
+ .comment       0x00000030       0x31 External_Interrupt/EXT_INT.o
  .comment       0x00000030       0x31 ISR_Interrupt/APP_I.o
  .comment       0x00000030       0x31 main.o
  .comment       0x00000030       0x31 Timers/Timers.o
@@ -456,68 +448,77 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0xc0
+.debug_aranges  0x00000000       0xe0
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x28 External_Interrupt/APP_E.o
  .debug_aranges
-                0x00000028       0x28 ISR_Interrupt/APP_I.o
+                0x00000028       0x20 External_Interrupt/EXT_INT.o
  .debug_aranges
-                0x00000050       0x20 main.o
+                0x00000048       0x28 ISR_Interrupt/APP_I.o
  .debug_aranges
-                0x00000070       0x50 Timers/Timers.o
+                0x00000070       0x20 main.o
+ .debug_aranges
+                0x00000090       0x50 Timers/Timers.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x87f
+.debug_info     0x00000000      0x98a
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x4e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_info    0x000004e6      0x102 External_Interrupt/APP_E.o
- .debug_info    0x000005e8       0x89 ISR_Interrupt/APP_I.o
- .debug_info    0x00000671       0x7a main.o
- .debug_info    0x000006eb      0x194 Timers/Timers.o
+ .debug_info    0x000005e8       0xed External_Interrupt/EXT_INT.o
+ .debug_info    0x000006d5       0x89 ISR_Interrupt/APP_I.o
+ .debug_info    0x0000075e       0x98 main.o
+ .debug_info    0x000007f6      0x194 Timers/Timers.o
 
-.debug_abbrev   0x00000000      0x73a
+.debug_abbrev   0x00000000      0x7b2
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x4a3 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_abbrev  0x000004a3       0xaa External_Interrupt/APP_E.o
- .debug_abbrev  0x0000054d       0x67 ISR_Interrupt/APP_I.o
- .debug_abbrev  0x000005b4       0x75 main.o
- .debug_abbrev  0x00000629      0x111 Timers/Timers.o
+ .debug_abbrev  0x0000054d       0x85 External_Interrupt/EXT_INT.o
+ .debug_abbrev  0x000005d2       0x67 ISR_Interrupt/APP_I.o
+ .debug_abbrev  0x00000639       0x68 main.o
+ .debug_abbrev  0x000006a1      0x111 Timers/Timers.o
 
-.debug_line     0x00000000      0x434
+.debug_line     0x00000000      0x4ea
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x115 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_line    0x00000115       0xe2 External_Interrupt/APP_E.o
- .debug_line    0x000001f7       0x89 ISR_Interrupt/APP_I.o
- .debug_line    0x00000280       0x3f main.o
- .debug_line    0x000002bf      0x175 Timers/Timers.o
+ .debug_line    0x000001f7       0x97 External_Interrupt/EXT_INT.o
+ .debug_line    0x0000028e       0x89 ISR_Interrupt/APP_I.o
+ .debug_line    0x00000317       0x5e main.o
+ .debug_line    0x00000375      0x175 Timers/Timers.o
 
-.debug_frame    0x00000000      0x16c
+.debug_frame    0x00000000      0x190
  *(.debug_frame)
  .debug_frame   0x00000000       0x48 External_Interrupt/APP_E.o
- .debug_frame   0x00000048       0x48 ISR_Interrupt/APP_I.o
- .debug_frame   0x00000090       0x24 main.o
- .debug_frame   0x000000b4       0xb8 Timers/Timers.o
+ .debug_frame   0x00000048       0x24 External_Interrupt/EXT_INT.o
+ .debug_frame   0x0000006c       0x48 ISR_Interrupt/APP_I.o
+ .debug_frame   0x000000b4       0x24 main.o
+ .debug_frame   0x000000d8       0xb8 Timers/Timers.o
 
-.debug_str      0x00000000      0x441
+.debug_str      0x00000000      0x48d
  *(.debug_str)
  .debug_str     0x00000000      0x196 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_str     0x00000196      0x1c6 External_Interrupt/APP_E.o
                                 0x1fa (size before relaxing)
- .debug_str     0x0000035c       0x2d ISR_Interrupt/APP_I.o
+ .debug_str     0x0000035c       0x4c External_Interrupt/EXT_INT.o
+                                0x1e8 (size before relaxing)
+ .debug_str     0x000003a8       0x2d ISR_Interrupt/APP_I.o
                                 0x181 (size before relaxing)
- .debug_str     0x00000389       0x11 main.o
-                                0x12c (size before relaxing)
- .debug_str     0x0000039a       0xa7 Timers/Timers.o
+ .debug_str     0x000003d5       0x11 main.o
+                                0x192 (size before relaxing)
+ .debug_str     0x000003e6       0xa7 Timers/Timers.o
                                 0x1fb (size before relaxing)
 
-.debug_loc      0x00000000      0x1ba
+.debug_loc      0x00000000      0x247
  *(.debug_loc)
  .debug_loc     0x00000000       0x49 External_Interrupt/APP_E.o
- .debug_loc     0x00000049       0x49 ISR_Interrupt/APP_I.o
- .debug_loc     0x00000092      0x128 Timers/Timers.o
+ .debug_loc     0x00000049       0x8d External_Interrupt/EXT_INT.o
+ .debug_loc     0x000000d6       0x49 ISR_Interrupt/APP_I.o
+ .debug_loc     0x0000011f      0x128 Timers/Timers.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -537,12 +538,13 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x80
+.debug_ranges   0x00000000       0x90
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x18 External_Interrupt/APP_E.o
- .debug_ranges  0x00000018       0x18 ISR_Interrupt/APP_I.o
- .debug_ranges  0x00000030       0x10 main.o
- .debug_ranges  0x00000040       0x40 Timers/Timers.o
+ .debug_ranges  0x00000018       0x10 External_Interrupt/EXT_INT.o
+ .debug_ranges  0x00000028       0x18 ISR_Interrupt/APP_I.o
+ .debug_ranges  0x00000040       0x10 main.o
+ .debug_ranges  0x00000050       0x40 Timers/Timers.o
 
 .debug_macro
  *(.debug_macro)

@@ -4,7 +4,6 @@
  */ 
 
 /*External_Interrupt*/
-/*
 #include "APP_E.h"
 int main(void)
 {
@@ -15,8 +14,8 @@ int main(void)
 	}
 	return 0;
 }
-*/
 
+/*
 //ISR_Interrupt
 int main(void)
 {
@@ -27,10 +26,11 @@ int main(void)
 	}
 	return 0;
 }
+*/
 
 
-/*
 //bitMath
+/*
 int main(void)
 {
 	bit_Math_Init();
@@ -41,8 +41,9 @@ int main(void)
 	return 0;
 }
 */
-/*
+
 //Timers
+/*
 int main(void)
 {
 	Timer_Test_Init();
@@ -51,5 +52,4 @@ int main(void)
 		Timer_Test();
 	}
 	return 0;
-}
-*/
+}*/

@@ -3,39 +3,39 @@ Testing.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0000012a  00000000  00000000  00000074  2**1
+  0 .text         0000017c  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  0000019e  2**0
+  1 .data         00000000  00800060  00800060  000001f0  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000004  00800060  00800060  0000019e  2**0
+  2 .bss          00000004  00800060  00800060  000001f0  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000019e  2**0
+  3 .comment      00000030  00000000  00000000  000001f0  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001d0  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000220  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000c0  00000000  00000000  0000020c  2**0
+  5 .debug_aranges 000000e0  00000000  00000000  0000025c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000087f  00000000  00000000  000002cc  2**0
+  6 .debug_info   0000098a  00000000  00000000  0000033c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000073a  00000000  00000000  00000b4b  2**0
+  7 .debug_abbrev 000007b2  00000000  00000000  00000cc6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000434  00000000  00000000  00001285  2**0
+  8 .debug_line   000004ea  00000000  00000000  00001478  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  0000016c  00000000  00000000  000016bc  2**2
+  9 .debug_frame  00000190  00000000  00000000  00001964  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000441  00000000  00000000  00001828  2**0
+ 10 .debug_str    0000048d  00000000  00000000  00001af4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000001ba  00000000  00000000  00001c69  2**0
+ 11 .debug_loc    00000247  00000000  00000000  00001f81  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000080  00000000  00000000  00001e23  2**0
+ 12 .debug_ranges 00000090  00000000  00000000  000021c8  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00000000 <__vectors>:
    0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
-   4:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__vector_1>
-   8:	0c 94 59 00 	jmp	0xb2	; 0xb2 <__vector_2>
+   4:	0c 94 44 00 	jmp	0x88	; 0x88 <__vector_1>
+   8:	0c 94 82 00 	jmp	0x104	; 0x104 <__vector_2>
    c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
@@ -44,7 +44,7 @@ Disassembly of section .text:
   20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
-  2c:	0c 94 6e 00 	jmp	0xdc	; 0xdc <__vector_11>
+  2c:	0c 94 97 00 	jmp	0x12e	; 0x12e <__vector_11>
   30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
@@ -76,137 +76,196 @@ Disassembly of section .text:
   6a:	a4 36       	cpi	r26, 0x64	; 100
   6c:	b2 07       	cpc	r27, r18
   6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
-  70:	0e 94 6b 00 	call	0xd6	; 0xd6 <main>
-  74:	0c 94 93 00 	jmp	0x126	; 0x126 <_exit>
+  70:	0e 94 94 00 	call	0x128	; 0x128 <main>
+  74:	0c 94 bc 00 	jmp	0x178	; 0x178 <_exit>
 
 00000078 <__bad_interrupt>:
   78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-0000007c <__vector_1>:
+0000007c <Ex_init>:
+
+#include "APP_E.h"
+
+void Ex_init()
+{
 	INT_init(INT_0 , rising_edge);
-	DDRA|=1;
+  7c:	62 e0       	ldi	r22, 0x02	; 2
+  7e:	86 e0       	ldi	r24, 0x06	; 6
+  80:	0e 94 56 00 	call	0xac	; 0xac <INT_init>
+	DDRA|=1; // pin 0 of port a as output
+  84:	d0 9a       	sbi	0x1a, 0	; 26
+  86:	08 95       	ret
+
+00000088 <__vector_1>:
 }
 
 ISR(INT0_vect)
 {
-  7c:	1f 92       	push	r1
-  7e:	0f 92       	push	r0
-  80:	0f b6       	in	r0, 0x3f	; 63
-  82:	0f 92       	push	r0
-  84:	11 24       	eor	r1, r1
-  86:	8f 93       	push	r24
-  88:	9f 93       	push	r25
-		PORTA^=1;
-  8a:	9b b3       	in	r25, 0x1b	; 27
-  8c:	81 e0       	ldi	r24, 0x01	; 1
-  8e:	89 27       	eor	r24, r25
-  90:	8b bb       	out	0x1b, r24	; 27
+  88:	1f 92       	push	r1
+  8a:	0f 92       	push	r0
+  8c:	0f b6       	in	r0, 0x3f	; 63
+  8e:	0f 92       	push	r0
+  90:	11 24       	eor	r1, r1
+  92:	8f 93       	push	r24
+  94:	9f 93       	push	r25
+		PORTA^=1; // toggle pin 0
+  96:	9b b3       	in	r25, 0x1b	; 27
+  98:	81 e0       	ldi	r24, 0x01	; 1
+  9a:	89 27       	eor	r24, r25
+  9c:	8b bb       	out	0x1b, r24	; 27
 }
-  92:	9f 91       	pop	r25
-  94:	8f 91       	pop	r24
-  96:	0f 90       	pop	r0
-  98:	0f be       	out	0x3f, r0	; 63
-  9a:	0f 90       	pop	r0
-  9c:	1f 90       	pop	r1
-  9e:	18 95       	reti
+  9e:	9f 91       	pop	r25
+  a0:	8f 91       	pop	r24
+  a2:	0f 90       	pop	r0
+  a4:	0f be       	out	0x3f, r0	; 63
+  a6:	0f 90       	pop	r0
+  a8:	1f 90       	pop	r1
+  aa:	18 95       	reti
 
-000000a0 <ISR_init>:
-#include "APP_I.h"
+000000ac <INT_init>:
+#include "EXT_INT.h"
 
 
-void ISR_init()
+void INT_init(INT_NUM int_num , SENSE_CONTROL sense_control)
 {
-	GICR|=(1<<7);
-  a0:	8b b7       	in	r24, 0x3b	; 59
-  a2:	80 68       	ori	r24, 0x80	; 128
-  a4:	8b bf       	out	0x3b, r24	; 59
-	MCUCR|=(2<<2);
-  a6:	85 b7       	in	r24, 0x35	; 53
-  a8:	88 60       	ori	r24, 0x08	; 8
-  aa:	85 bf       	out	0x35, r24	; 53
-	DDRA|=1;
-  ac:	d0 9a       	sbi	0x1a, 0	; 26
+	GICR|=(1<<int_num);
+  ac:	9b b7       	in	r25, 0x3b	; 59
+  ae:	21 e0       	ldi	r18, 0x01	; 1
+  b0:	30 e0       	ldi	r19, 0x00	; 0
+  b2:	08 2e       	mov	r0, r24
+  b4:	02 c0       	rjmp	.+4      	; 0xba <INT_init+0xe>
+  b6:	22 0f       	add	r18, r18
+  b8:	33 1f       	adc	r19, r19
+  ba:	0a 94       	dec	r0
+  bc:	e2 f7       	brpl	.-8      	; 0xb6 <INT_init+0xa>
+  be:	29 2b       	or	r18, r25
+  c0:	2b bf       	out	0x3b, r18	; 59
+	switch(int_num)
+  c2:	86 30       	cpi	r24, 0x06	; 6
+  c4:	a1 f0       	breq	.+40     	; 0xee <INT_init+0x42>
+  c6:	87 30       	cpi	r24, 0x07	; 7
+  c8:	b1 f0       	breq	.+44     	; 0xf6 <INT_init+0x4a>
+  ca:	85 30       	cpi	r24, 0x05	; 5
+  cc:	c9 f4       	brne	.+50     	; 0x100 <INT_init+0x54>
+	{
+		case INT_2:
+		MCUCSR|=((sense_control & 0x01)<<6);
+  ce:	84 b7       	in	r24, 0x34	; 52
+  d0:	46 2f       	mov	r20, r22
+  d2:	41 70       	andi	r20, 0x01	; 1
+  d4:	50 e0       	ldi	r21, 0x00	; 0
+  d6:	00 24       	eor	r0, r0
+  d8:	56 95       	lsr	r21
+  da:	47 95       	ror	r20
+  dc:	07 94       	ror	r0
+  de:	56 95       	lsr	r21
+  e0:	47 95       	ror	r20
+  e2:	07 94       	ror	r0
+  e4:	54 2f       	mov	r21, r20
+  e6:	40 2d       	mov	r20, r0
+  e8:	48 2b       	or	r20, r24
+  ea:	44 bf       	out	0x34, r20	; 52
+		break;
+  ec:	09 c0       	rjmp	.+18     	; 0x100 <INT_init+0x54>
+		
+		case INT_0:
+		MCUCR|=sense_control;
+  ee:	85 b7       	in	r24, 0x35	; 53
+  f0:	68 2b       	or	r22, r24
+  f2:	65 bf       	out	0x35, r22	; 53
+		break;
+  f4:	05 c0       	rjmp	.+10     	; 0x100 <INT_init+0x54>
+		case INT_1:
+		MCUCR|=(sense_control<<2);
+  f6:	85 b7       	in	r24, 0x35	; 53
+  f8:	66 0f       	add	r22, r22
+  fa:	66 0f       	add	r22, r22
+  fc:	68 2b       	or	r22, r24
+  fe:	65 bf       	out	0x35, r22	; 53
+	}
 	sei();
-  ae:	78 94       	sei
-  b0:	08 95       	ret
+ 100:	78 94       	sei
+ 102:	08 95       	ret
 
-000000b2 <__vector_2>:
+00000104 <__vector_2>:
+	DDRA|=1;     //pin 0 of port a as output
+	sei();       // enable global interrupt
 }
 
 ISR(INT1_vect_)
 {
-  b2:	1f 92       	push	r1
-  b4:	0f 92       	push	r0
-  b6:	0f b6       	in	r0, 0x3f	; 63
-  b8:	0f 92       	push	r0
-  ba:	11 24       	eor	r1, r1
-  bc:	8f 93       	push	r24
-  be:	9f 93       	push	r25
-	PORTA^=1;
-  c0:	9b b3       	in	r25, 0x1b	; 27
-  c2:	81 e0       	ldi	r24, 0x01	; 1
-  c4:	89 27       	eor	r24, r25
-  c6:	8b bb       	out	0x1b, r24	; 27
+ 104:	1f 92       	push	r1
+ 106:	0f 92       	push	r0
+ 108:	0f b6       	in	r0, 0x3f	; 63
+ 10a:	0f 92       	push	r0
+ 10c:	11 24       	eor	r1, r1
+ 10e:	8f 93       	push	r24
+ 110:	9f 93       	push	r25
+	PORTA^=1; // toggle pin 0
+ 112:	9b b3       	in	r25, 0x1b	; 27
+ 114:	81 e0       	ldi	r24, 0x01	; 1
+ 116:	89 27       	eor	r24, r25
+ 118:	8b bb       	out	0x1b, r24	; 27
 }
-  c8:	9f 91       	pop	r25
-  ca:	8f 91       	pop	r24
-  cc:	0f 90       	pop	r0
-  ce:	0f be       	out	0x3f, r0	; 63
-  d0:	0f 90       	pop	r0
-  d2:	1f 90       	pop	r1
-  d4:	18 95       	reti
+ 11a:	9f 91       	pop	r25
+ 11c:	8f 91       	pop	r24
+ 11e:	0f 90       	pop	r0
+ 120:	0f be       	out	0x3f, r0	; 63
+ 122:	0f 90       	pop	r0
+ 124:	1f 90       	pop	r1
+ 126:	18 95       	reti
 
-000000d6 <main>:
-*/
+00000128 <main>:
 
-//ISR_Interrupt
+/*External_Interrupt*/
+#include "APP_E.h"
 int main(void)
 {
-	ISR_init();
-  d6:	0e 94 50 00 	call	0xa0	; 0xa0 <ISR_init>
-  da:	ff cf       	rjmp	.-2      	; 0xda <main+0x4>
+	Ex_init();
+ 128:	0e 94 3e 00 	call	0x7c	; 0x7c <Ex_init>
+ 12c:	ff cf       	rjmp	.-2      	; 0x12c <main+0x4>
 
-000000dc <__vector_11>:
+0000012e <__vector_11>:
 
 volatile static  u32 overflow=0;
 
 
 ISR(TIMER0_OVF_vect)
 {
-  dc:	1f 92       	push	r1
-  de:	0f 92       	push	r0
-  e0:	0f b6       	in	r0, 0x3f	; 63
-  e2:	0f 92       	push	r0
-  e4:	11 24       	eor	r1, r1
-  e6:	8f 93       	push	r24
-  e8:	9f 93       	push	r25
-  ea:	af 93       	push	r26
-  ec:	bf 93       	push	r27
+ 12e:	1f 92       	push	r1
+ 130:	0f 92       	push	r0
+ 132:	0f b6       	in	r0, 0x3f	; 63
+ 134:	0f 92       	push	r0
+ 136:	11 24       	eor	r1, r1
+ 138:	8f 93       	push	r24
+ 13a:	9f 93       	push	r25
+ 13c:	af 93       	push	r26
+ 13e:	bf 93       	push	r27
 	overflow++;	
-  ee:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
-  f2:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
-  f6:	a0 91 62 00 	lds	r26, 0x0062	; 0x800062 <_edata+0x2>
-  fa:	b0 91 63 00 	lds	r27, 0x0063	; 0x800063 <_edata+0x3>
-  fe:	01 96       	adiw	r24, 0x01	; 1
- 100:	a1 1d       	adc	r26, r1
- 102:	b1 1d       	adc	r27, r1
- 104:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
- 108:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <_edata+0x1>
- 10c:	a0 93 62 00 	sts	0x0062, r26	; 0x800062 <_edata+0x2>
- 110:	b0 93 63 00 	sts	0x0063, r27	; 0x800063 <_edata+0x3>
+ 140:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+ 144:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
+ 148:	a0 91 62 00 	lds	r26, 0x0062	; 0x800062 <_edata+0x2>
+ 14c:	b0 91 63 00 	lds	r27, 0x0063	; 0x800063 <_edata+0x3>
+ 150:	01 96       	adiw	r24, 0x01	; 1
+ 152:	a1 1d       	adc	r26, r1
+ 154:	b1 1d       	adc	r27, r1
+ 156:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
+ 15a:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <_edata+0x1>
+ 15e:	a0 93 62 00 	sts	0x0062, r26	; 0x800062 <_edata+0x2>
+ 162:	b0 93 63 00 	sts	0x0063, r27	; 0x800063 <_edata+0x3>
 }
- 114:	bf 91       	pop	r27
- 116:	af 91       	pop	r26
- 118:	9f 91       	pop	r25
- 11a:	8f 91       	pop	r24
- 11c:	0f 90       	pop	r0
- 11e:	0f be       	out	0x3f, r0	; 63
- 120:	0f 90       	pop	r0
- 122:	1f 90       	pop	r1
- 124:	18 95       	reti
+ 166:	bf 91       	pop	r27
+ 168:	af 91       	pop	r26
+ 16a:	9f 91       	pop	r25
+ 16c:	8f 91       	pop	r24
+ 16e:	0f 90       	pop	r0
+ 170:	0f be       	out	0x3f, r0	; 63
+ 172:	0f 90       	pop	r0
+ 174:	1f 90       	pop	r1
+ 176:	18 95       	reti
 
-00000126 <_exit>:
- 126:	f8 94       	cli
+00000178 <_exit>:
+ 178:	f8 94       	cli
 
-00000128 <__stop_program>:
- 128:	ff cf       	rjmp	.-2      	; 0x128 <__stop_program>
+0000017a <__stop_program>:
+ 17a:	ff cf       	rjmp	.-2      	; 0x17a <__stop_program>
