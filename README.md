@@ -2,10 +2,8 @@
 
 it is Project 2 in EgFWD Embedded Systems Professional Track
 
-this Project about Traffic Control
-
-3 lights for vehicles and 3 lights for Pedestrians
-
+this Project about Traffic Control   
+3 lights for vehicles and 3 lights for Pedestrians   
 1 Push Button for Pedestrians which changes the mode of the traffic lights from normal mode to
 Pedestrians mode so vehicles stop and Pedestrians can cross the road.
 
