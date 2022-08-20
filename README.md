@@ -15,5 +15,5 @@ Used Hardware:
 ATmega32
 
 Software:
-Atmel Studio
+Atmel Studio   
 Proteus
