@@ -30,6 +30,7 @@
 #define CR_GREEN_PIN              PB2   // Vehicles    GREEN  Led
 #define DELAY_TIME                (5000000) // Delay Period (5 sec)
 
+
 typedef enum {Yellow_BEFORE_GREEN,GREEN,Yellow_AFTER_GREEN,RED}STATE_type;
 
 void APP_Start(void);// initializes the timer (Normal Mode) , PORTA pins (Pedestrians LEDs), 

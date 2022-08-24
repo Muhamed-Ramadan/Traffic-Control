@@ -4,7 +4,7 @@
 
 
 
-# define sei()  __asm__ __volatile__ ("sei" ::: "memory") // enables the global interrupt
+# define sei()  __asm__ __volatile__ ("sei" ::: "memory") // enables the global interrupt 
 # define cli()  __asm__ __volatile__ ("cli" ::: "memory") // disables the global interrupt
 
 #define INT0_vect		__vector_1      //This Macro defines IRQ0 Handler (external Interrupt INT0)

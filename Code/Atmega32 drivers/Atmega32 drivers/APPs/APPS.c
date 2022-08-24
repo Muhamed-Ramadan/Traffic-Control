@@ -5,11 +5,90 @@
 
 
 STATE_type state=Yellow_BEFORE_GREEN; // states in normal mode {state 0=yellow , 1=green , 2=yellow , 3=red}
-u8 pedestrian_mode_flag=0; // to indicate that the system entered pedestrian mode (putton is pressed)
+u8 pedestrian_mode_flag=0; // to indicate that the system entered pedestrian mode (button is pressed)
 u32 ON_Period=DELAY_TIME; 
 /* 5 sec period for every color in normal mode 
 , when push button is pressed (pedestrian_mode_flag = 1) ON_Period is modified to zero 
 so the lights are ignored and the normal mode is finished without lights or delay time  */
+
+
+void APP_Start(void)
+{
+	Timer0_Init(NORMAL, _8_PRESC);
+	SETBit(PD_DDR,PD_GREEN_PIN );   //DDR Pin of  Pedestrian's Green LED as output
+	SETBit(PD_DDR,PD_YELLOW_PIN );  //DDR Pin of  Pedestrian's YELLOW LED as output
+	SETBit(PD_DDR,PD_RED_PIN );     //DDR Pin of  Pedestrian's RED LED as output
+	SETBit(CR_DDR,CR_GREEN_PIN );   //DDR Pin of  Vehicle's    Green LED as output
+	SETBit(CR_DDR,CR_YELLOW_PIN );	//DDR Pin of  Vehicle's    YELLOW LED as output
+	SETBit(CR_DDR,CR_RED_PIN );		//DDR Pin of  Vehicle's    RED LED as output
+	INT_init(INT_0, rising_edge); // enables INT0 and Selects External Interrupt Sense Mode (Rising Edge)
+}
+
+
+
+void APP_Run(void)
+{
+	if (pedestrian_mode_flag==1) // system in Pedestrian Mode
+	{
+		Pedestrian_Mode();
+		
+	}
+	else // system in Normal Mode
+	{
+		ON_Period=DELAY_TIME;
+		if (state==Yellow_BEFORE_GREEN)  // Yellow_BEFORE_GREEN
+		{
+			for (u8 i=0;i<4;i++)
+			{
+				SETBit(CR_PORT,CR_YELLOW_PIN );
+				timer_delay_us(ON_Period/8);
+				CLRBit(CR_PORT,CR_YELLOW_PIN );
+				timer_delay_us(ON_Period/8);
+			}
+			
+			if (pedestrian_mode_flag==0)
+			state=GREEN;
+		}
+		// GREEN
+		else if (state==GREEN)            
+		{
+			SETBit(CR_PORT,CR_GREEN_PIN );
+			timer_delay_us(ON_Period);
+			CLRBit(CR_PORT,CR_GREEN_PIN );
+			
+			if (pedestrian_mode_flag==0)
+			state=Yellow_AFTER_GREEN;
+		}
+		// Yellow_AFTER_GREEN
+		else if (state==Yellow_AFTER_GREEN)  
+		{
+			for (u8 i=0;i<4;i++)
+			{
+				SETBit(CR_PORT,CR_YELLOW_PIN );
+				timer_delay_us(ON_Period/8);
+				CLRBit(CR_PORT,CR_YELLOW_PIN );
+				timer_delay_us(ON_Period/8);
+			}
+			
+			
+			if (pedestrian_mode_flag==0)
+			state=RED;
+		}
+		// RED
+		else if (state==RED)                
+		{
+			SETBit(CR_PORT,CR_RED_PIN );
+			timer_delay_us(ON_Period);
+			CLRBit(CR_PORT,CR_RED_PIN );
+			
+			if (pedestrian_mode_flag==0)
+			state=Yellow_BEFORE_GREEN;
+		}
+		
+	}
+
+}
+
 
 
 ISR(INT0_vect) // the interrupt is generated at the rising edge so long press has no effect
@@ -40,8 +119,8 @@ void Pedestrian_Mode()
 	//D. Red    of Pedestrian and Green  of Vehicles are on For 5 sec
 	
 	
-	// step A is not active if the normal mode is red (Vehicles are already stopped) (state =RED=3)
-	if (state==Yellow_BEFORE_GREEN || state==GREEN || state==Yellow_AFTER_GREEN)  
+	// step A is not active if the normal mode is red (Vehicles are already stopped)
+	if (state==Yellow_BEFORE_GREEN || state==GREEN || state==Yellow_AFTER_GREEN)  // = (state!=RED)
 	{
 		SETBit(PD_PORT,PD_RED_PIN );// Red of Pedestrians will be on for 5 sec
 		SETBit(CR_PORT,CR_GREEN_PIN );// Green of Vehicles will be on for 5 sec
@@ -95,78 +174,7 @@ void Pedestrian_Mode()
 	pedestrian_mode_flag=0;    // now pedestrian mode is finished
 }
 
-void APP_Start(void)
-{
-	Timer0_Init(NORMAL);
-	SETBit(PD_DDR,PD_GREEN_PIN );   //DDR Pin of  Pedestrian's Green LED as output
-	SETBit(PD_DDR,PD_YELLOW_PIN );  //DDR Pin of  Pedestrian's YELLOW LED as output
-	SETBit(PD_DDR,PD_RED_PIN );     //DDR Pin of  Pedestrian's RED LED as output
-	SETBit(CR_DDR,CR_GREEN_PIN );   //DDR Pin of  Vehicle's    Green LED as output
-	SETBit(CR_DDR,CR_YELLOW_PIN );	//DDR Pin of  Vehicle's    YELLOW LED as output
-	SETBit(CR_DDR,CR_RED_PIN );		//DDR Pin of  Vehicle's    RED LED as output
-	INT_init(INT_0, rising_edge); // enables INT0 and Selects External Interrupt Sense Mode (Rising Edge)
-}
 
-
-void APP_Run(void)
-{
-	if (pedestrian_mode_flag==1) // system in Pedestrian Mode
-	{
-		Pedestrian_Mode();
-		
-	}
-	else // system in Normal Mode
-	{
-		ON_Period=DELAY_TIME;
-		if (state==Yellow_BEFORE_GREEN)
-		{
-			for (u8 i=0;i<4;i++)
-			{
-				SETBit(CR_PORT,CR_YELLOW_PIN );
-				timer_delay_us(ON_Period/8);
-				CLRBit(CR_PORT,CR_YELLOW_PIN );
-				timer_delay_us(ON_Period/8);
-			}
-			
-			if (pedestrian_mode_flag==0)
-			 state=GREEN;
-		}
-		else if (state==GREEN)
-		{
-			SETBit(CR_PORT,CR_GREEN_PIN );
-			timer_delay_us(ON_Period);
-			CLRBit(CR_PORT,CR_GREEN_PIN );
-			
-			if (pedestrian_mode_flag==0)
-			state=Yellow_AFTER_GREEN;
-		}
-		else if (state==Yellow_AFTER_GREEN)
-		{
-			for (u8 i=0;i<4;i++)
-			{
-				SETBit(CR_PORT,CR_YELLOW_PIN );
-				timer_delay_us(ON_Period/8);
-				CLRBit(CR_PORT,CR_YELLOW_PIN );
-				timer_delay_us(ON_Period/8);
-			}
-			
-			
-			if (pedestrian_mode_flag==0)
-			state=RED;
-		}
-		else if (state==RED)
-		{
-			SETBit(CR_PORT,CR_RED_PIN );
-			timer_delay_us(ON_Period);
-			CLRBit(CR_PORT,CR_RED_PIN );
-			
-			if (pedestrian_mode_flag==0)
-			state=Yellow_BEFORE_GREEN;
-		}
-		
-	}
-
-}
 
 
 
