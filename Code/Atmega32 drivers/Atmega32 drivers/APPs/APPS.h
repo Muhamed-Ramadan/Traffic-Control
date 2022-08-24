@@ -6,13 +6,12 @@
 
 
 
-#include "bitMath.h"
-#include "dataTypes.h"
-#include "registers.h"
-#include "APPS.h"
-#include "EXT_INT.h"
-#include "Timers.h"
-#include "ISR_Interrupt.h"
+#include "bitMath.h"        // macro function of set clear toggle 
+#include "dataTypes.h"      // new data types names
+#include "registers.h"      // registers addresses
+#include "EXT_INT.h"        // External interrupt init function
+#include "Timers.h"         // delay function
+#include "ISR_Interrupt.h"  // sei() , ISRs
 
 
 
