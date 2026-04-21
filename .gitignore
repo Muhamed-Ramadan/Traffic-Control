@@ -1,8 +1,11 @@
-# Build outputs (generated automatically by Microchip Studio)
+# Build artifacts
 Debug/
 Release/
 *.elf
 *.hex
+!simulation/*.hex
+!Simulation/*.hex
+!Test Modules/Simulation/*.hex
 *.eep
 *.lss
 *.map
@@ -11,12 +14,18 @@ Release/
 *.d
 makedep.mk
 
-# IDE & editor files
+# IDE files
 .vs/
 *.atsuo
 *.componentinfo.xml
 *.workspace
+*.cproj
+*.atsln
+!traffic_light.atsln
 
-# OS files
+# Proteus backup files
+*.pdsbak
+
+# OS
 .DS_Store
 Thumbs.db
