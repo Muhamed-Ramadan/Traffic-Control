@@ -1,0 +1,22 @@
+# Build outputs (generated automatically by Microchip Studio)
+Debug/
+Release/
+*.elf
+*.hex
+*.eep
+*.lss
+*.map
+*.srec
+*.o
+*.d
+makedep.mk
+
+# IDE & editor files
+.vs/
+*.atsuo
+*.componentinfo.xml
+*.workspace
+
+# OS files
+.DS_Store
+Thumbs.db
