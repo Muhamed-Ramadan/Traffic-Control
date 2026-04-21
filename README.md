@@ -148,10 +148,7 @@ traffic-light-system/
 │       ├── data_types.h            # u8, u16, u32, s8 ...
 │       └── registers.h             # PORTA, TCCR0, GICR ... macros
 ├── tests/
-│   ├── test_ext_interrupt/
-│   ├── test_isr/
-│   ├── test_timer/
-│   └── test_bit_math/
+│   
 ├── simulation/
 │   └── sim.pdsprj
 ├── design/
@@ -159,15 +156,8 @@ traffic-light-system/
 │   └── system-design.pdf
 ├── docs/
 │   ├── ATmega32_Datasheet.pdf
-│   ├── system-flowchart.svg
-│   └── demo-videos/
-│       ├── user-story-1.mkv
-│       ├── user-story-2.mkv
-│       ├── user-story-3.mkv
-│       ├── user-story-4.mkv
-│       ├── user-story-5.mkv
-│       ├── testing/
-│       └── driver-walkthroughs/
+│   └── system-flowchart.svg
+│   
 ├── simulation_screenshot.png
 ├── traffic_light.atsln
 ├── .gitignore
