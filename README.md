@@ -17,7 +17,7 @@ A bare-metal embedded traffic light controller for the **ATmega32 microcontrolle
 - [State Machine Flowchart](#state-machine-flowchart)
 - [Project Structure](#project-structure)
 - [Drivers & APIs](#drivers--apis)
-- [Key Implementation Details](#key-implementation-details)
+- [Design Decisions](#design-decisions)
 - [Getting Started](#getting-started)
 - [Testing](#testing)
 - [Known Limitations & Future Work](#known-limitations--future-work)
@@ -42,11 +42,7 @@ The circuit includes two 3-LED traffic lights (vehicle and pedestrian) and a pus
 
 ### Simulation GIF
 
-> 📽️ *GIF placeholder — record a short Proteus simulation showing the full pedestrian crossing sequence (Normal Mode → button press → crossing → return to Normal) and replace this line with:*
-> ```
-> ![Demo](demo.gif)
-> ```
-> **How to record:** Run the simulation in Proteus, use OBS or ShareX to screen-record ~15–20 seconds covering one full crossing cycle. Export as GIF (keep under 10 MB) and place it in the repo root as `demo.gif`.
+![Demo](demo.gif)
 
 ---
 
@@ -70,17 +66,17 @@ The project follows a strict 3-layer architecture — each layer depends only on
 ```
 ┌──────────────────────────────────────────┐
 │           Application Layer              │
-│   app.c / app.h                          │
+│   APPS.c / APPS.h                        │
 │   System logic, state machine, ISR       │
 ├──────────────────────────────────────────┤
 │              MCAL Layer                  │
-│   ext_int.c  — External Interrupt (INT0) │
-│   timers.c   — Timer0 driver             │
-│   isr_interrupt.h — ISR vector macros    │
+│   EXT_INT.c  — External Interrupt (INT0) │
+│   Timers.c   — Timer0 driver             │
+│   ISR_Interrupt.h — ISR vector macros    │
 ├──────────────────────────────────────────┤
 │            Utility Layer                 │
-│   bit_math.h   — Bit manipulation macros │
-│   data_types.h — Portable type aliases   │
+│   bitMath.h    — Bit manipulation macros │
+│   dataTypes.h  — Portable type aliases   │
 │   registers.h  — Register address macros │
 └──────────────────────────────────────────┘
 ```
@@ -131,38 +127,78 @@ Both Yellow blink (5s)  ──►  Car Green + Ped Red (5s)  ──►  Normal M
 traffic-light-system/
 ├── src/
 │   ├── main.c
-│   ├── app/
-│   │   ├── app.c                   # System logic, state machine, ISR
-│   │   └── app.h                   # Pin defines, state enum, prototypes
-│   ├── mcal/
-│   │   ├── external_interrupt/
-│   │   │   ├── ext_int.c           # INT0/1/2 driver
-│   │   │   └── ext_int.h
-│   │   ├── isr_interrupts/
-│   │   │   └── isr_interrupt.h     # ISR macro, sei/cli, vector names
-│   │   └── timer/
-│   │       ├── timers.c            # Timer0: init, delay, force-stop
-│   │       └── timers.h
-│   └── utility/
-│       ├── bit_math.h              # SET/CLR/TGL/GET bit macros
-│       ├── data_types.h            # u8, u16, u32, s8 ...
+│   ├── APPs/
+│   │   ├── APPS.c                  # System logic, state machine, ISR
+│   │   └── APPS.h                  # Pin defines, state enum, prototypes
+│   ├── MCAL/
+│   │   ├── External_Interrupt/
+│   │   │   ├── EXT_INT.c           # INT0/1/2 driver
+│   │   │   └── EXT_INT.h
+│   │   ├── ISR_Interrupts/
+│   │   │   └── ISR_Interrupt.h     # ISR macro, sei/cli, vector names
+│   │   └── Timer/
+│   │       ├── Timers.c            # Timer0: init, delay, force-stop
+│   │       └── Timers.h
+│   └── Utility/
+│       ├── bitMath.h               # SET/CLR/TGL/GET bit macros
+│       ├── dataTypes.h             # u8, u16, u32, s8 ...
 │       └── registers.h             # PORTA, TCCR0, GICR ... macros
-├── tests/
-│   
-├── simulation/
-│   └── sim.pdsprj
-├── design/
-│   ├── system-design.docx
-│   └── system-design.pdf
+├── Test Modules/
+│   ├── Testing.atsln               # Microchip Studio solution for driver tests
+│   ├── src/
+│   │   ├── main.c                  # Entry point — uncomment the target test to run
+│   │   ├── Testing.cproj
+│   │   ├── External_Interrupt/
+│   │   │   ├── APP_E.c             # Test: INT0 init + toggle on interrupt
+│   │   │   ├── EXT_INT.c / .h      # Driver under test
+│   │   │   └── main.c
+│   │   ├── ISR_Interrupt/
+│   │   │   ├── APP_I.c             # Test: ISR macro and vector binding
+│   │   │   └── ISR_Interrupt.h
+│   │   ├── Timers/
+│   │   │   ├── APP_T.c             # Test: Timer0 delay accuracy (toggle every 1s)
+│   │   │   └── Timers.c / .h
+│   │   └── bitMath/
+│   │       ├── APP_M.c             # Test: SET/CLR/TGL macros on real pins
+│   │       └── bitMath.h
+│   └── Simulation/
+│       ├── Sim.pdsprj              # Proteus simulation for driver tests
+│       └── Testing.hex             # Pre-built firmware for the test simulation
+├── Simulation/
+│   ├── Sim.pdsprj                  # Main system simulation
+│   └── Traffic_Light_System.hex   # Pre-built firmware — load directly into Proteus
+├── Design/
+│   ├── System Design.docx          # Full system design document
+│   └── System Design.pdf
 ├── docs/
 │   ├── ATmega32_Datasheet.pdf
 │   └── system-flowchart.svg
-│   
+├── Videos/
+│   ├── static design.mkv                        # System design walkthrough
+│   ├── Application_layer App Driver.mkv          # App layer code walkthrough
+│   ├── MCAL_layer 01 ISR_Interrupts_Driver.mkv   # ISR driver walkthrough
+│   ├── MCAL_layer 02 External_Interrupt_Driver.mkv
+│   ├── MCAL_layer 03 Timers_Driver.mkv
+│   ├── Utility layer 01 dataTypes.mkv
+│   ├── Utility layer 02 bitMath.mkv
+│   ├── Utility layer 03 registers.mkv
+│   ├── User Story 1 .mkv                         # Crossing while car Green is ON
+│   ├── User Story 2.mkv                          # Crossing while Yellow is blinking
+│   ├── User Story 3.mkv                          # Crossing while car Red is ON
+│   ├── User Story 4.mkv                          # Long press — no action
+│   ├── User Story 5.mkv                          # Double press — only first handled
+│   └── Testing Videos/
+│       ├── Test1_External_Interrupt.mkv          # INT0 driver test demo
+│       ├── Test2_ISR_Interrupt.mkv               # ISR macro test demo
+│       ├── Test3_bitMath.mkv                     # bitMath macros test demo
+│       └── Test4_Timer.mkv                       # Timer0 delay accuracy test demo
 ├── simulation_screenshot.png
 ├── traffic_light.atsln
 ├── .gitignore
 └── README.md
 ```
+
+> **Note:** All walkthrough and test videos are narrated in Arabic.
 
 ---
 
@@ -170,7 +206,7 @@ traffic-light-system/
 
 ### Utility Layer
 
-#### `bit_math.h`
+#### `bitMath.h`
 ```c
 SETBit(REG, BIT_NO)    // Set single bit
 CLRBit(REG, BIT_NO)    // Clear single bit
@@ -182,7 +218,7 @@ SETALLBits(REG)        // Set all bits
 CLRALLBits(REG)        // Clear all bits
 ```
 
-#### `data_types.h`
+#### `dataTypes.h`
 ```c
 typedef unsigned char  u8;
 typedef unsigned int   u16;
@@ -197,7 +233,7 @@ Memory-mapped access to ATmega32 registers via `SELECTOR(ADDRESS)` — covers Po
 
 ### MCAL Layer
 
-#### `timers.c`
+#### `Timers.c`
 ```c
 void Timer0_Init(timer_modes_EN mode, Prescaler_EN prescaler);
 void Timer0_Start(void);
@@ -207,14 +243,14 @@ void timer_delay_us(u32 delay);   // Busy-wait delay in microseconds
 void Force_Stop_Timer0(void);     // Forces any in-progress delay to exit immediately
 ```
 
-#### `ext_int.c`
+#### `EXT_INT.c`
 ```c
 void INT_init(INT_NUM int_num, SENSE_CONTROL sense_control);
 // int_num:       INT_0 | INT_1 | INT_2
 // sense_control: low_level | any_level | rising_edge | falling_edge
 ```
 
-#### `isr_interrupt.h`
+#### `ISR_Interrupt.h`
 ```c
 sei()          // Enable global interrupts
 cli()          // Disable global interrupts
@@ -225,7 +261,7 @@ ISR(INT_VECT)  // Declare ISR — vectors: INT0_vect, TIMER0_OVF_vect
 
 ### Application Layer
 
-#### `app.c`
+#### `APPS.c`
 ```c
 void APP_Start(void);       // Initialize GPIO, Timer0, INT0
 void APP_Run(void);         // Main loop: Normal Mode + mode switching
@@ -237,42 +273,46 @@ ISR(INT0_vect);             // Button handler: sets flag, exits current delay
 
 | Variable | Type | Role |
 |---|---|---|
-| `state` | `STATE_type` | Current normal-mode state |
+| `state` | `STATE_type` | Current normal-mode state (Yellow_BEFORE_GREEN, GREEN, Yellow_AFTER_GREEN, RED) |
 | `pedestrian_mode_flag` | `u8` | 0 = normal mode, 1 = pedestrian mode active |
 | `ON_Period` | `u32` | Active delay period; zeroed by ISR to skip remaining wait |
 
 ---
 
-## Key Implementation Details
+## Design Decisions
 
-### Challenge: interrupt-safe state exit
+### ISR placed in the application layer
 
-When the button is pressed mid-cycle, the system must exit the current 5-second delay immediately. Two mechanisms work together in `ISR(INT0_vect)`:
+`ISR(INT0_vect)` lives in `APPS.c` rather than the MCAL layer. This is intentional — the ISR contains application-level logic: it manages the `pedestrian_mode_flag` state and zeroes `ON_Period` to control system flow. Placing it in MCAL would require a callback mechanism that adds unnecessary complexity for this scope.
+
+### Interrupt-safe state exit
+
+When the button is pressed mid-cycle, the system must exit the current 5-second delay immediately. Two mechanisms work together inside `ISR(INT0_vect)`:
 
 ```c
 ISR(INT0_vect) {
     if (pedestrian_mode_flag == 0) {
         pedestrian_mode_flag = 1;
         ON_Period = 0;          // next timer_delay_us(0) call returns instantly
-        Force_Stop_Timer0();    // exits any in-progress delay on next iteration
+        Force_Stop_Timer0();    // exits any in-progress delay on its next iteration
     }
 }
 ```
 
-`ON_Period = 0` handles a press between two delay calls. `Force_Stop_Timer0()` handles a press *during* a delay call — it sets the overflow counter to `~0` so the busy-wait loop exits on its very next check.
+`ON_Period = 0` handles a press that arrives *between* two delay calls. `Force_Stop_Timer0()` handles a press that arrives *during* a delay call — it sets the internal overflow counter to `~0` so the busy-wait loop exits on its very next check without waiting for the remaining time.
 
-### Challenge: double-press and re-entrancy prevention
+### Re-entrancy and double-press prevention
 
-`pedestrian_mode_flag` is a one-shot guard. Once set to `1` by the ISR, the `if (pedestrian_mode_flag == 0)` check blocks any further button press from re-triggering the pedestrian sequence. The flag is only reset at the very end of `Pedestrian_Mode()`, after the full crossing sequence completes.
+`pedestrian_mode_flag` acts as a one-shot guard. Once set to `1` by the ISR, the `if (pedestrian_mode_flag == 0)` check at the top of the ISR blocks any subsequent button press — whether a double press or a press during the crossing sequence — from re-triggering the pedestrian logic. The flag is only reset to `0` at the very end of `Pedestrian_Mode()`, after the full crossing sequence completes.
 
 ### State-aware crossing
 
-`Pedestrian_Mode()` reads the `state` variable to decide whether the Yellow warning blink is necessary:
+`Pedestrian_Mode()` reads the `state` variable to decide whether the Yellow warning blink is necessary before giving the pedestrian a green signal:
 
-- State is `RED` → cars are already stopped → skip the Yellow blink, proceed directly to Ped Green.
+- State is `RED` → vehicles are already stopped → skip the Yellow blink, proceed directly to Ped Green.
 - Any other state → show Yellow blink on both signals first, then proceed to Ped Green.
 
-The system never skips a safety step regardless of when the button is pressed.
+This ensures the system never skips a safety step regardless of when the button is pressed.
 
 ---
 
@@ -284,21 +324,29 @@ The system never skips a safety step regardless of when the button is pressed.
 
 ### Run the simulation
 1. Clone the repository
-2. Open `traffic_light.atsln` in Microchip Studio → Build → produces `src/Debug/traffic_light.hex`
-3. Open `simulation/sim.pdsprj` in Proteus
-4. Load the `.hex` into the ATmega32 component
-5. Run — press the button to trigger pedestrian mode
+2. Open `Simulation/Sim.pdsprj` in Proteus
+3. The pre-built `Traffic_Light_System.hex` is already loaded — press Run
+4. Press the button in the simulation to trigger pedestrian mode
+
+### Build from source
+1. Open `traffic_light.atsln` in Microchip Studio
+2. Build → produces `src/Debug/traffic_light.hex`
+3. Load the `.hex` into the ATmega32 component in Proteus and run
 
 ---
 
 ## Testing
 
-| Module | What it validates |
-|---|---|
-| `test_bit_math` | All bit manipulation macros |
-| `test_timer` | Timer0 init, delay accuracy, `Force_Stop` behavior |
-| `test_ext_interrupt` | INT0 initialization and sense control |
-| `test_isr` | ISR macro expansion and vector binding |
+Each MCAL driver was tested independently before system integration. The approach: modify `Test Modules/src/main.c` to call the target driver's test module, rebuild, and run the dedicated test simulation in `Test Modules/Simulation/Sim.pdsprj`.
+
+| Driver | Test module | What it validates |
+|---|---|---|
+| `bitMath` | `APP_M.c` | SET/CLR/TGL macros observed on real pins — LED toggles at 1s intervals |
+| `Timer0` | `APP_T.c` | `timer_delay_us(1000000)` produces accurate 1-second toggle on PA0 |
+| `External Interrupt` | `APP_E.c` | INT0 rising-edge fires ISR and toggles LED; INT1 has no effect (isolation check) |
+| `ISR macro` | `APP_I.c` | ISR macro expands correctly and vector binding compiles without conflict |
+
+> The test simulation circuit contains two LEDs and two push buttons (INT0 and INT1). INT0 toggles the red LED on each press; INT1 has no effect — this validates both correct interrupt initialization and driver isolation.
 
 ### User story results
 
@@ -310,14 +358,14 @@ The system never skips a safety step regardless of when the button is pressed.
 | US-4 | Long press | No action | ✅ Pass |
 | US-5 | Double press | First press handled, second ignored | ✅ Pass |
 
-Demo recordings for all user stories are in `docs/demo-videos/`.
+Demo recordings for all user stories and driver tests are in `Videos/`. All videos are narrated in Arabic.
 
 ---
 
 ## Known Limitations & Future Work
 
 **No HAL for LEDs and button**
-The application layer controls LEDs and reads the button directly using `bit_math.h` macros, without a dedicated GPIO Hardware Abstraction Layer. This couples pin assignments to the application logic. A proper HAL (e.g., `hal/led.c`, `hal/button.c`) would improve portability and testability, and is the natural next step in the architecture.
+The application layer controls LEDs and reads the button directly using `bitMath.h` macros, without a dedicated GPIO Hardware Abstraction Layer. This couples pin assignments to the application logic. A proper HAL (e.g., `hal/led.c`, `hal/button.c`) would improve portability and testability, and is the natural next step in the architecture.
 
 **Potential improvements**
 - Add GPIO HAL for LED and button abstraction
